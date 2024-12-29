@@ -1,15 +1,20 @@
 package com.ai.SpringAIDemo.controllers;
 
 import com.ai.SpringAIDemo.services.ChatService;
+import com.ai.SpringAIDemo.services.ImageService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class GenAIController {
-    private ChatService chatService;
+    private final ChatService chatService;
+    private final ImageService imageService;
 
-    public GenAIController(ChatService chatService) {
+    public GenAIController(ChatService chatService, ImageService imageService) {
         this.chatService = chatService;
+        this.imageService = imageService;
     }
 
     @GetMapping("ask-ai")
@@ -20,5 +25,22 @@ public class GenAIController {
     @GetMapping("ask-ai-options")
     public String getResponseOptions(String prompt) {
         return this.chatService.getResponseOptions(prompt);
+    }
+
+    @GetMapping("generate-image")
+    public String generateImage(String prompt) {
+        String image = "<img src=\"" + this.imageService.generateImage(prompt) + "\" alt=\"" + prompt + "\">";
+        return image;
+    }
+
+    @GetMapping("generate-image-options")
+    public String generateImageOptions(String prompt) {
+        StringBuilder imageUrls = new StringBuilder();
+        List<String> images = this.imageService.generateImageOptions(prompt);
+
+        for (String imageUrl : images) {
+            imageUrls.append("<img src=\"").append(imageUrl).append("\" alt=\"").append(prompt).append("\">\n");
+        }
+        return imageUrls.toString();
     }
 }
