@@ -38,9 +38,14 @@ public class GenAIController {
     }
 
     @GetMapping("generate-image-options")
-    public String generateImageOptions(String prompt) {
+    public String generateImageOptions(String prompt,
+                                       @RequestParam(defaultValue = "dall-e-3") String model,
+                                       @RequestParam(defaultValue = "hd") String quality,
+                                       @RequestParam(defaultValue = "1") int n,
+                                       @RequestParam(defaultValue = "1024") int width,
+                                       @RequestParam(defaultValue = "1024") int height) {
         StringBuilder imageUrls = new StringBuilder();
-        List<String> images = this.imageService.generateImageOptions(prompt);
+        List<String> images = this.imageService.generateImageOptions(prompt, model, quality, n, width, height);
 
         for (String imageUrl : images) {
             imageUrls.append("<img src=\"").append(imageUrl).append("\" alt=\"").append(prompt).append("\">\n");
