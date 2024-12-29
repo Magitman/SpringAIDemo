@@ -21,14 +21,14 @@ public class ImageService {
         return imageResponse.getResult().getOutput().getUrl();
     }
 
-    public List<String> generateImageOptions(String prompt) {
+    public List<String> generateImageOptions(String prompt, String model, String quality, int n, int width, int height) {
         ImageResponse imageResponse = this.imageModel.call(new ImagePrompt(prompt,
                 OpenAiImageOptions.builder()
-                        .withModel("dall-e-2")
-                        .withQuality("hd")
-                        .withN(3)
-                        .withHeight(1024)
-                        .withWidth(1024).build()));
+                        .withModel(model)
+                        .withQuality(quality)
+                        .withN(n)
+                        .withHeight(height)
+                        .withWidth(width).build()));
 
         List<String> imagesGenerated = imageResponse.getResults().stream().map(
                 imageGeneration -> imageGeneration.getOutput().getUrl()
